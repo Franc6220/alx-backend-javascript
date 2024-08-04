@@ -1,7 +1,9 @@
 // Function that returns a Promise
 export default function getResponseFromAPI() {
-  return new Promise((resolve) => {
-    resolve();
-  });
+	const myPromise = new Promise(
+		(resolve) => {
+			resolve();
+		};
+	);
+	return myPromise;
 }
-
