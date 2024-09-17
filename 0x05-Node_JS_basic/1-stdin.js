@@ -1,14 +1,17 @@
 // 1-stdin.js
-console.log("Welcome to Holberton School, what is your name?\n");
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
 
-process.stdin.on('data', (data) => {
-	const name = data.toString().trim();
-	console.log(`Your name is: ${name}`);
+process.stdin.on('readable', () => {
+	const uname = process.stdin.read();
 
-	// To ensure the program waits for input before exiting
-	process.stdin.end();
+	if (uname) {
+		process.stdout.write(`Your name is: ${uname.toString().trim()}\n`);
+
+		// Close stdin manually to simulate process end in piped input
+		process.stdin.end();
+	}
 });
 
 process.stdin.on('end', () => {
-	console.log("This important software is now closing");
+	process.stdout.write('This important software is now closing\n');
 });
