@@ -2,8 +2,11 @@ const http = require('http');
 
 // Create the server
 const app = http.createServer((req, res) => {
+	// Set the response code to 200 (OK) 
 	res.statusCode = 200;
 	res.setHeader('Content-Type', 'text/plain');
+
+	// Send " " in response body
 	res.end('Hello Holberton School!\n');
 });
 
