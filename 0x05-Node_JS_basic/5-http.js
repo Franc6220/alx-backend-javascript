@@ -1,48 +1,19 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
-const countStudents = require('./3-read_file_async');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 
-// Create the server
-const app = http.createServer((req, res) => {
-	if (req.method === 'GET') {
-		if (req.url === '/') {
-			// Handle the root path
-			res.statusCode = 200;
-			res.setHeader('Content-Type', 'text/plain');
-			res.end('Hello Holberton School!\n');
-		} else if (req.url === '/students') {
-			// Handle the /students path
-			const filePath = process.argv[2];
-			countStudents(filePath)
-			.then(() => {
-				res.statusCode = 200;
-				res.setHeader('Content-Type', 'text/plain');
-				// Assuming countStudents logs the data, you need to capture it to send as response.
-				res.end('This is the list of our students\n');
-			})
-			.catch((error) => {
-				res.statusCode = 500;
-				res.setHeader('Content-Type', 'text/plain');
-				res.end('Cannot load the database\n');
-			});
-		} else {
-			// Handle unknown paths
-			res.statusCode = 404;
-			res.setHeader('Content-Type', 'text/plain');
-			res.end('Not Found\n');
-		}
-	} else {
-		res.statusCode = 405;
-		res.setHeader('Content-Type', 'text/plain');
-		res.end('Method Not Allowed\n');
-	}
+const app = require('./4-http');
+
+chai.use(chaiHttp);
+chai.should();
+
+describe('Small HTTP server', () => {
+  it('Returns the right content for /', (done) => {
+    chai.request(app)
+      .get('/')
+      .end((error, response) => {
+        chai.expect(response.text).to.equal('Hello Holberton School!');
+        chai.expect(response.statusCode).to.equal(200);
+        done();
+      });
+  });
 });
-
-// Make the server listen on port 1245
-app.listen(1245, () => {
-	console.log('Server running at http://localhost:1245/');
-});
-
-// Export the server for external use
-module.exports = app;
