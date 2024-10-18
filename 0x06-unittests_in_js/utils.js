@@ -1,18 +1,36 @@
 // utils.js
-const Utilis = {
-	calculateNumber: function(type, a, b) {
-		switch (type) {
-			case 'SUM':
-				return Math.Round(a) + Math.round(b);
-			case 'SEBTRACT':
-				return Math.round(a) - Math.round(b);
-			case 'DIVIDE':
-				if (b === 0) return 'Error';
-				return Math.round(a) / Math.round(b);
-			default:
-				return null;
-		}
+const Utils = {
+	isNegZero(n) {
+	  const num = Number(n);
+	  return num === 0 && 1 / num === -Infinity;
+	},
+	calculateNumber(type, a, b = 0) {
+	  let aNum = Number(a);
+	  let bNum = Number(b);
+  
+	  if (Number.isNaN(aNum) || Number.isNaN(bNum))
+		throw TypeError('Parameters must be numbers or able to coerce to number');
+  
+	  aNum = Math.round(aNum);
+	  bNum = Math.round(bNum);
+  
+	  let quotient;
+  
+	  switch (type) {
+		case 'SUM':
+		  return aNum + bNum;
+		case 'SUBTRACT':
+		  return aNum - bNum;
+		case 'DIVIDE':
+		  if (bNum === 0) return 'ERROR';
+		  quotient = aNum / bNum;
+		  return this.isNegZero(quotient) ? 0 : quotient;
+		default:
+		  throw Error(
+			'Invalid operation type. Valid types are "SUM", "SUBTRACT", and "DIVIDE".'
+		  );
+	  }
 	}
-};
-
-module.exports = Utils;
+  };
+  
+  module.exports = Utils;
